@@ -85,7 +85,15 @@ $('.js-geolocation').on('click', function() {
 });
 
 $(document).ready(function() {
+
+if ("geolocation" in navigator) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+    loadWeather(position.coords.latitude+','+position.coords.longitude); //load weather using your lat/lng coordinates
+  }); 
+} else {
   loadWeather('Long Beach, CA',''); //@params location, woeid
+}
+
 });
 
 function loadWeather(location, woeid) {
