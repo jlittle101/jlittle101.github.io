@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+<style>
+span {
+  color: red;
+}
+
+</style>
+<body>
+<div>
+  <table>
+    <tr>
+      <td> <select name="units1" id="units1" onchange="PopulateUnits2()">
+		</select></td>
+      <td><input type="text" name="value1" id="value1" onKeyUp="ConverterUnits1ToUnits2()" /></td>
+      <td><span id="errmsg1"></span></td>
+    </tr>
+    <tr>
+      <td> <select name="units2" id="units2"
+            onchange="ConverterUnits1ToUnits2()"></select></td>
+      <td><input type="text" name="value2" id="value2" onKeyUp="ConverterUnits2ToUnits1()"/></td>
+      <td><span id="errmsg2"></span></td>
+    </tr>
+    <tr>
+      <td><input type="button" name="clearAll" id="clearAll" value="Clear All" onclick="ClearAll()" /></td>
+	  <td><input type="button" name="clearValues" id="clearValues" value="Clear Values" onclick="ClearValues()" /></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
+<script>
+           window.onload = InitialPopulateUnits();
+
+           function InitialPopulateUnits() {
+             var units1 = document.getElementById("units1");
+             var units2 = document.getElementById("units2");
+             units1.options.length = 0;
+             units2.options.length = 0;
+             var options = ["Select Unit", "MPH", "KPH", "Knots", "Cool People", "Tony B's"];
+             for (var i = 0; i < options.length; i++) {
+               var opt = options[i];
+               var el = document.createElement("option");
+               el.textContent = opt;
+               el.value = opt;
+               units1.appendChild(el);
+             }
+			PopulateUnits2();
+           }
+		  
+		   
+           function PopulateUnits2() {
+             var units1 = document.getElementById("units1");
+             var units2 = document.getElementById("units2");
+			
+			if (units1.value.toString() == "Select Unit") {
+			   units2.options.length = 0;
+               var option = document.createElement("option");
+               option.text = "Select Unit";
+               option.value = "Select Unit";
+               units2.appendChild(option);
+			   }
+            else if (units1.value.toString() == "MPH") {
+               units2.options.length = 0;
+               var options = ["KPH", "Knots"];
+               for (var i = 0; i < options.length; i++) {
+                 var opt = options[i];
+                 var el = document.createElement("option");
+                 el.textContent = opt;
+                 el.value = opt;
+                 units2.appendChild(el)
+               }
+
+             } 
+			else if (units1.value.toString() == "KPH") {
+               units2.options.length = 0;
+               var options = ["MPH", "Knots"];
+               for (var i = 0; i < options.length; i++) {
+                 var opt = options[i];
+                 var el = document.createElement("option");
+                 el.textContent = opt;
+                 el.value = opt;
+                 units2.appendChild(el)
+               }
+             }else if (units1.value.toString() == "Knots") {
+               units2.options.length = 0;
+               var options = ["MPH", "KPH"];
+               for (var i = 0; i < options.length; i++) {
+                 var opt = options[i];
+                 var el = document.createElement("option");
+                 el.textContent = opt;
+                 el.value = opt;
+                 units2.appendChild(el)
+               }
+               }
+			   else if (units1.value.toString() == "Cool People") {
+               units2.options.length = 0;
+               var options = ["Tony B's"];
+               for (var i = 0; i < options.length; i++) {
+                 var opt = options[i];
+                 var el = document.createElement("option");
+                 el.textContent = opt;
+                 el.value = opt;
+                 units2.appendChild(el)
+            } 
+			}
+		   else if (units1.value.toString() == "Tony B's") {
+               units2.options.length = 0;
+               var options = ["Cool People"];
+               for (var i = 0; i < options.length; i++) {
+                 var opt = options[i];
+                 var el = document.createElement("option");
+                 el.textContent = opt;
+                 el.value = opt;
+                 units2.appendChild(el)
+            } 
+			}
+				Converter(0);
+           }
+
+           function ClearAll() {
+             document.getElementById("value1").value = "";
+             document.getElementById("value2").value = "";
+
+             InitialPopulateUnits();
+           }
+		   
+		   function ClearValues() {
+             document.getElementById("value1").value = "";
+             document.getElementById("value2").value = "";
+		   }
+
+		    function ConverterUnits1ToUnits2()
+		    {
+				Converter(0);
+		    }
+		   
+			function ConverterUnits2ToUnits1()
+			{
+				Converter(1);
+			}
+			
+			
+           function Converter(ConversionDirection) {
+		   
+			if (ConversionDirection == 0){
+				value1 = document.getElementById("value1");
+				errmsg1 = document.getElementById("errmsg1");
+				units1ddl = document.getElementById("units1");
+				value2 = document.getElementById("value2");
+				errmsg2 = document.getElementById("errmsg2");
+				units2ddl = document.getElementById("units2");
+			}
+			else {
+				value2 = document.getElementById("value1");
+				errmsg2 = document.getElementById("errmsg1");
+				units2ddl = document.getElementById("units1");
+				value1 = document.getElementById("value2");
+				errmsg1 = document.getElementById("errmsg2");
+				units1ddl = document.getElementById("units2");
+			}
+			
+			if (value1.value.indexOf(' ') >= 0) {
+                 //display error message
+                 errmsg1.textContent="No spaces allowed!";
+                 value1.value = value1.value.replace(/\s/g,"");
+				 value1.focus();
+				 errmsg2.textContent= "";
+                 return false;
+               }
+			else if (value2.value.indexOf(' ') >= 0) {
+                 //display error message
+                 errmsg2.textContent="No spaces allowed!";
+                 value2.value = value2.value.replace(/\s/g,"");
+				 value2.focus();
+				 errmsg1.textContent= "";
+                 return false;
+               } 
+			else if (/[^0-9.]/.test(value1.value)) {
+                 //display error message
+                 errmsg1.textContent="Digits Only";
+			     value1.value = value1.value.replace(/[^0-9.]/g,"");
+				 value1.focus();
+				 errmsg2.textContent= "";
+                 return false;
+               }
+			else if (isNaN(value2.value)) {
+                 //display error message
+                 errmsg2.textContent="Digits Only";
+			     value2.value = value2.value.replace(/[^0-9.]/g,"");
+				 value2.focus();
+				 errmsg1.textContent= "";
+                 return false;
+               }
+			else {
+			errmsg1.textContent= "";
+			errmsg2.textContent= "";
+			
+
+             var units1 = units1ddl.options[units1ddl.selectedIndex].value;
+             var units2 = units2ddl.options[units2ddl.selectedIndex].value;
+             var result;
+			
+			 if (units1 == "MPH" || units2 == "MPH")
+			 {
+				if (units1 == "MPH")
+				{
+					switch(units2){
+						case "KPH":
+							result = parseFloat(value1.value) * 1.609344;
+							break;
+						case "Knots":
+						   result = parseFloat(value1.value) * 0.868976;
+						   break;
+					}
+				}
+				else if (units2 == "MPH")
+				{
+					switch(units1){
+						case "KPH":
+							result = parseFloat(value1.value) / 1.609344;
+							break;
+						case "Knots":
+							result = parseFloat(value1.value) / 0.868976;
+							break;
+					
+					}
+				}
+			 }
+			 else if (units1 == "Knots" || units2 == "Knots")
+			 {
+				if (units1 == "Knots")
+				{
+						switch(units2){
+							case "KPH":
+								result = parseFloat(value1.value) / 0.539957;
+								break;						
+						}
+				}
+				else if (units2 == "Knots")
+						switch(units1){
+							case "KPH":
+								result = parseFloat(value1.value) * 0.539957;
+								break;
+						}
+			 }
+			 else if (units1 == "Cool People" || units2 == "Cool People")
+			 {
+				if (units1 == "Cool People")
+				{
+						switch(units2){
+							case "Tony B's":
+								result = parseFloat(value1.value) / 1000.00;
+								break;						
+						}
+				}
+				else if (units2 == "Cool People")
+						switch(units1){
+							case "Tony B's":
+								result = parseFloat(value1.value) * 1000.00;
+								break;
+						}
+			 }
+
+			 if (isNaN(result))
+			 {
+			 value2.value = "";
+			 }
+			 else{
+			 value2.value = result;
+			 }
+           }
+	   }
+</script>
