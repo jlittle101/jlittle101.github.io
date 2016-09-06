@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Run your first Perl script</title>
+</head>
+<body>
+
+<input type="text" id="symbol" />
+<button type="submit" onClick="getData();">Get Data</button>
+
+<table id="example" class="display" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Date</th>
+            <th>Open</th>
+            <th>High</th>
+            <th>Low</th>
+            <th>Close</th>
+            <th>Volume</th>
+            <th>Adj_Close</th>
+        </tr>
+    </thead>
+</table>
+  <input type="text" name="StockSearch" id="StockSearch" onKeyUp="SearchForStock()" />
+  <button onclick="getStock()">Click me</button>
+</body>
+</html>
+
+<script>
+function getData() {
+    var url = "http://query.yahooapis.com/v1/public/yql";
+    var symbol = $("#symbol").val();
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy= today.getFullYear();
+    var yyyyLast = today.getFullYear()-1;
+    if(dd<10){
+    dd='0'+dd
+    } 
+    if(mm<10){
+        mm='0'+mm
+    } 
+		var today = yyyy+'-'+mm+'-'+dd;
+    var lastYear = yyyyLast+'-'+mm+'-'+dd;
+    
+    var searchString = "Select * from yahoo.finance.historicaldata where startDate = '" + lastYear + "' and endDate = '" + today + "' and symbol = '" + symbol + "'";
+    var data = encodeURIComponent(searchString);
+    $.getJSON(url, 'q=' + data + "&format=json&diagnostics=true&env=http://datatables.org/alltables.env")
+        .done(function (data) {
+        if (data.query.results)
+        {
+          var table_data = JSON.stringify(data.query.results.quote);
+
+   				$('#example').DataTable(
+          {
+          	"data": data.query.results.quote,
+            "columns": [
+            	{ "data": "Symbol"},
+              { "data": "Date"},
+              { "data": "Open"},
+              { "data": "High"},
+              { "data": "Low"},
+              { "data": "Close"},
+              { "data": "Volume"},
+              { "data": "Adj_Close"}
+            ]
+          });
+       }
+
+    })
+        .fail(function (jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+            $("#result").text('Request failed: ' + err);
+    });
+}</script>
