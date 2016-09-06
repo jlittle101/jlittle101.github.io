@@ -1,0 +1,8 @@
+<html>
+<head>
+<title>Run your first Perl script</title>
+</head>
+<body>
+Click on <a href="http://ichart.finance.yahoo.com/table.csv?s=YHOO&d=0&e=28&f=2010&g=d&a=3&b=12&c=1996&ignore=.csv">this link</a> to get stock history.
+</body>
+</html>
