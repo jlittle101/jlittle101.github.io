@@ -3,11 +3,30 @@
 <title>Run your first Perl script</title>
 </head>
 <body>
+  <input type="text" name="StockSearch" id="StockSearch" onKeyUp="SearchForStock()" />
   <button onclick="getStock()">Click me</button>
 </body>
 </html>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.css"></script>
+<script src="https://cdn.datatables.net/r/dt/dt-1.10.9/datatables.min.js"></script>
 <script>
+
+  function SearchForStock() {
+    function getData() {
+    var url = "http://query.yahooapis.com/v1/public/yql";
+    var symbol = $("#symbol").val();
+    var data = encodeURIComponent("select * from yahoo.finance.quotes where symbol in ('" + symbol + "')");
+
+    $.getJSON(url, 'q=' + data + "&format=json&diagnostics=true&env=http://datatables.org/alltables.env")
+        .done(function (data) {
+        $("#result").text("Bid Price: " + data.query.results.quote.LastTradePriceOnly);
+    })
+        .fail(function (jqxhr, textStatus, error) {
+        var err = textStatus + ", " + error;
+     
+  }
+  
   function getStock() {
       window.location.href = 'http://ichart.finance.yahoo.com/table.csv?s=YOO&d=0&e=28&f=2010&g=d&a=3&b=12&c=1996&ignore=.csv';
   }
